@@ -6,8 +6,6 @@ import { USER_SIGN_UP_MUTATION } from "@graphql/mutations";
 
 import useAppUserStore from "@stores/appUserStore";
 
-// TODO - route to home screen if user is already signed in
-
 
 const useAppUserManager = () => {
   const [qlUserSignIn] = useLazyQuery(USER_SIGN_IN_QUERY);
@@ -88,11 +86,19 @@ const useAppUserManager = () => {
           const { status, token, appUser } = result.data["userSignUp"];
 
           switch (status) {
-            case "0":
+            case "0-0":
               setStatus({
                 flag: "error",
                 title: "User Exists",
                 message: "Use a different username"
+              });
+              break;
+
+            case "0-1":
+              setStatus({
+                flag: "error",
+                title: "E-mail Used",
+                message: "Use a different e-mail"
               });
               break;
 

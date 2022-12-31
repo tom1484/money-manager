@@ -8,10 +8,7 @@ import { createStackNavigator, TransitionPresets } from "@react-navigation/stack
 
 import { Root } from "react-native-popup-confirm-toast";
 
-import AppNavigator from "@containers/AppNavigator";
-import SignInNavigator from "@containers/SignInNavigator";
-
-import useAppUserStore from "@stores/appUserStore";
+import { ApplicationNavigator, AuthencationNavigator } from "@navigation";
 
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from "@apollo/client";
 import { split } from "@apollo/client";
@@ -69,7 +66,6 @@ const style = StyleSheet.create({
 const { Navigator, Screen } = createStackNavigator();
 
 export default function App() {
-  const { appUser } = useAppUserStore();
   return (
     <ApolloProvider client={client}>
       <ApplicationProvider {...eva} theme={{ ...theme, ...eva.light }}>
@@ -79,15 +75,15 @@ export default function App() {
               <NavigationContainer>
                 <Navigator>
                   <Screen
-                    name="SignInNavigator"
-                    component={SignInNavigator}
+                    name="AuthencationNavigator"
+                    component={AuthencationNavigator}
                     options={{
                       headerShown: false,
                     }}
                   />
                   <Screen
-                    name="AppNavigator"
-                    component={AppNavigator}
+                    name="ApplicationNavigator"
+                    component={ApplicationNavigator}
                     options={{
                       headerShown: false,
                     }}

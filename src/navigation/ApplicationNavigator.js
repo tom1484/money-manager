@@ -1,21 +1,10 @@
 import React from "react";
 
-import {
-  BottomNavigation,
-  BottomNavigationTab,
-  Layout,
-  Text,
-} from "@ui-kitten/components";
-import { NavigationContainer } from "@react-navigation/native";
+import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Foundation, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { StyleSheet, Dimensions, View, ScrollView } from "react-native";
+import { Foundation, Ionicons, MaterialIcons, Entypo } from "@expo/vector-icons";
 
-import HomeScreen from "@screens/HomeScreen";
-import StatisticsScreen from "@screens/StatisticsScreen";
-import AccountsScreen from "@screens/AccountsScreen";
-import SettingsScreen from "@screens/SettingsScreen";
-import SignInScreen from "../screens/SignInScreen";
+import { LedgerScreen, StatisticsScreen, AccountsScreen, SettingsScreen } from "@screens/application";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -26,7 +15,7 @@ const BottomTabBar = ({ navigation, state }) => {
       onSelect={(index) => navigation.navigate(state.routeNames[index])}
     >
       <BottomNavigationTab
-        icon={<Foundation name="home" size={24} color="black" />}
+        icon={<Entypo name="text-document-inverted" size={24} color="black" />}
       />
       <BottomNavigationTab
         icon={<Ionicons name="stats-chart-sharp" size={24} color="black" />}
@@ -43,23 +32,24 @@ const BottomTabBar = ({ navigation, state }) => {
 
 const TabNavigator = () => (
   <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
-    <Screen name="Home" component={HomeScreen} />
-    {/* <Screen name="Home" component={SignInScreen} /> */}
+    <Screen name="Ledger" component={LedgerScreen} />
     <Screen name="Statistics" component={StatisticsScreen} />
     <Screen name="Accounts" component={AccountsScreen} />
     <Screen name="Settings" component={SettingsScreen} />
   </Navigator>
 );
 
-const AppNavigator = () => (
-  <TabNavigator />
-);
+const AppNavigator = ({ navigation }) => {
 
-const style = StyleSheet.create({
-  rootLayout: {
-    width: "100%",
-    height: Dimensions.get("window").height,
-  }
-});
+  React.useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault();
+    });
+  }, [navigation]);
+
+  return (
+    <TabNavigator />
+  )
+};
 
 export default AppNavigator;

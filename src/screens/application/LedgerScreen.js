@@ -2,7 +2,7 @@ import React from "react";
 
 import { Layout, Text } from "@ui-kitten/components";
 
-const HomeScreen = () => {
+const LedgerScreen = () => {
   return (
     <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Home!</Text>
@@ -10,4 +10,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default LedgerScreen;

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ScrollView, Dimensions, View } from "react-native";
-import { Button, Card, Input, Layout, Text, Spinner } from "@ui-kitten/components";
+import { View } from "react-native";
+import { Button, Input, Layout, Text, Spinner } from "@ui-kitten/components";
 import { withStyles } from "@ui-kitten/components";
 
 import { Popup } from 'react-native-popup-confirm-toast';
@@ -120,7 +120,6 @@ const SignUpScreen = withStyles(ThemedComponent, theme => {
       alignItems: "center",
       width: "100%",
       height: "100%",
-      // height: Dimensions.get("window").height,
     },
     titleLayout: {
       flex: 1,
@@ -140,8 +139,6 @@ const SignUpScreen = withStyles(ThemedComponent, theme => {
       borderWidth: 1,
     },
     input: {
-      // marginLeft: 20,
-      // marginRight: 20,
       width: "80%",
       marginTop: 10,
       marginBottom: 10,
