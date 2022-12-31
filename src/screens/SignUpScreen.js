@@ -9,16 +9,17 @@ import { Popup } from 'react-native-popup-confirm-toast';
 import useConsecutiveInput from "@hooks/useConsecutiveInput";
 import useAppUserManager from "@hooks/useAppUserManager";
 
-const ThemedComponent = ({ eva, navigation }) => {
+const ThemedComponent = ({ eva }) => {
   const { inputRefs, inputStatus, nextInputFuncs, submitRef, onSubmit } = useConsecutiveInput(
-    2, () => {
-      signInAppUser(userNameInput, passwordInput);
+    3, () => {
+      signUpAppUser(userNameInput, passwordInput, emailInput);
     }
   );
 
-  const { signInProcessing, signInAppUser, status } = useAppUserManager();
+  const { signUpProcessing, signUpAppUser, status } = useAppUserManager();
   const [userNameInput, setUserNameInput] = React.useState("tom1484");
   const [passwordInput, setPasswordInput] = React.useState("password");
+  const [emailInput, setEmailInput] = React.useState("tomchen2003611@gmail.com");
 
   const showStatus = (status) => {
     const { flag, title, message } = status;
@@ -65,7 +66,7 @@ const ThemedComponent = ({ eva, navigation }) => {
   return (
     <Layout style={eva.style.rootLayout}>
       <Layout style={eva.style.formLayout} level="2">
-        <Text category="h1" style={{ margin: 10 }}>Welcome</Text>
+        <Text category="h1" style={{ margin: 10 }}>Accuont</Text>
         <Input
           style={eva.style.input}
           label="Username"
@@ -81,47 +82,45 @@ const ThemedComponent = ({ eva, navigation }) => {
           label='Password'
           value={passwordInput}
           onChangeText={setPasswordInput}
+          ref={inputRefs[1]}
           blurOnSubmit={false}
           secureTextEntry={true}
-          ref={inputRefs[1]}
           onSubmitEditing={nextInputFuncs[1]}
           status={inputStatus[1]}
+        />
+        <Input
+          style={eva.style.input}
+          label='E-mail'
+          value={emailInput}
+          onChangeText={setEmailInput}
+          blurOnSubmit={false}
+          ref={inputRefs[2]}
+          onSubmitEditing={nextInputFuncs[2]}
+          status={inputStatus[2]}
         />
         <Button
           style={eva.style.button}
           ref={submitRef}
           onPress={onSubmit}
-          accessoryLeft={signInProcessing ? LoadingIndicator : null}
-          disabled={signInProcessing}
+          accessoryLeft={signUpProcessing ? LoadingIndicator : null}
+          disabled={signUpProcessing}
         >
-          SIGN IN
+          SIGN UP
         </Button>
-      </Layout>
-      <Layout style={eva.style.footerLayout}>
-        <Text appearance="hint">
-          Don't have an account?&nbsp;
-          <Text
-            appearance="hint"
-            status="primary"
-            category="p2"
-            onPress={() => { navigation.navigate("SignUp") }}
-          >
-            Sign Up
-          </Text>
-        </Text>
       </Layout>
     </Layout>
   );
 };
 
-const SignInScreen = withStyles(ThemedComponent, theme => {
+const SignUpScreen = withStyles(ThemedComponent, theme => {
   return ({
     rootLayout: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
       width: "100%",
-      height: Dimensions.get("window").height,
+      height: "100%",
+      // height: Dimensions.get("window").height,
     },
     titleLayout: {
       flex: 1,
@@ -135,13 +134,14 @@ const SignInScreen = withStyles(ThemedComponent, theme => {
       justifyContent: "center",
       alignItems: "center",
       width: "80%",
-      maxHeight: "50%",
-      // height: "fit-content",
+      maxHeight: "62%",
       borderRadius: 20,
       borderColor: theme["color-border-100"],
       borderWidth: 1,
     },
     input: {
+      // marginLeft: 20,
+      // marginRight: 20,
       width: "80%",
       marginTop: 10,
       marginBottom: 10,
@@ -167,4 +167,4 @@ const SignInScreen = withStyles(ThemedComponent, theme => {
   })
 });
 
-export default SignInScreen;
+export default SignUpScreen;

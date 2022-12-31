@@ -9,11 +9,13 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Foundation, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { StyleSheet, Dimensions, View, ScrollView } from "react-native";
 
 import HomeScreen from "@screens/HomeScreen";
 import StatisticsScreen from "@screens/StatisticsScreen";
 import AccountsScreen from "@screens/AccountsScreen";
 import SettingsScreen from "@screens/SettingsScreen";
+import SignInScreen from "../screens/SignInScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -42,6 +44,7 @@ const BottomTabBar = ({ navigation, state }) => {
 const TabNavigator = () => (
   <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
     <Screen name="Home" component={HomeScreen} />
+    {/* <Screen name="Home" component={SignInScreen} /> */}
     <Screen name="Statistics" component={StatisticsScreen} />
     <Screen name="Accounts" component={AccountsScreen} />
     <Screen name="Settings" component={SettingsScreen} />
@@ -49,9 +52,14 @@ const TabNavigator = () => (
 );
 
 const AppNavigator = () => (
-  <NavigationContainer>
-    <TabNavigator />
-  </NavigationContainer>
+  <TabNavigator />
 );
+
+const style = StyleSheet.create({
+  rootLayout: {
+    width: "100%",
+    height: Dimensions.get("window").height,
+  }
+});
 
 export default AppNavigator;

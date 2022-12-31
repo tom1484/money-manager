@@ -3,8 +3,13 @@ import * as eva from "@eva-design/eva";
 import { ApplicationProvider } from "@ui-kitten/components";
 import { default as theme } from "./theme.json";
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
+
+import { Root } from "react-native-popup-confirm-toast";
+
 import AppNavigator from "@containers/AppNavigator";
-import SignInScreen from "@screens/SignInScreen";
+import SignInNavigator from "@containers/SignInNavigator";
 
 import useAppUserStore from "@stores/appUserStore";
 
@@ -13,6 +18,7 @@ import { split } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
+import { ScrollView, StyleSheet, Dimensions, View } from "react-native";
 
 
 const httpLink = new HttpLink({
@@ -52,18 +58,45 @@ const client = new ApolloClient({
   },
 });
 
+const style = StyleSheet.create({
+  rootLayout: {
+    width: "100%",
+    height: Dimensions.get("window").height,
+  }
+});
+
+
+const { Navigator, Screen } = createStackNavigator();
+
 export default function App() {
-  const { appUser, signInAppUser } = useAppUserStore();
+  const { appUser } = useAppUserStore();
   return (
     <ApolloProvider client={client}>
       <ApplicationProvider {...eva} theme={{ ...theme, ...eva.light }}>
-        {
-          appUser ? (
-            <AppNavigator />
-          ) : (
-            <SignInScreen />
-          )
-        }
+        <Root>
+          <ScrollView>
+            <View style={style.rootLayout}>
+              <NavigationContainer>
+                <Navigator>
+                  <Screen
+                    name="SignInNavigator"
+                    component={SignInNavigator}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Screen
+                    name="AppNavigator"
+                    component={AppNavigator}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                </Navigator>
+              </NavigationContainer>
+            </View>
+          </ScrollView>
+        </Root>
       </ApplicationProvider>
     </ApolloProvider>
   );
