@@ -18,3 +18,28 @@ query loadTransactionsByIDs($token: String!, $transactionIDs: [String]!) {
 }
 `;
 
+export const LOAD_TRANSACTION_TABLE_QUERY = gql`
+query loadTransactionTable(
+  $token: String!, 
+  $startDate: String, $endDate: String,
+  $filters: [String]!, $filterKeys: [[String]]!
+) {
+  loadTransactionTable(
+    token: $token, 
+    startDate: $startDate, endDate: $endDate,
+    filters: $filters, filterKeys: $filterKeys 
+  ) {
+    status
+    transactions {
+      type
+      date
+      accountSource
+      accountDestination
+      category
+      amount
+      description
+      _id
+    }
+  }
+}
+`;

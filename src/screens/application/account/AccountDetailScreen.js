@@ -2,7 +2,7 @@ import React from "react";
 
 import { Layout, Text, withStyles } from "@ui-kitten/components"
 import { Entypo } from '@expo/vector-icons';
-import { TransactionInfoGroup } from "@components/account";
+import { TransactionInfoGroup } from "@components/transaction";
 
 import useAppUserStore from "@stores/appUserStore";
 
@@ -80,7 +80,6 @@ const ThemedComponent = ({ eva, route, navigation }) => {
           for (let balance of balances) {
             state[balance.day - 1].balance = balance;
           }
-          console.log(state)
           return state;
         });
       }
@@ -158,6 +157,8 @@ const AccountDetailScreen = withStyles(ThemedComponent, theme => {
       flex: 1,
       justifyContent: "flex-start",
       width: "100%",
+      borderBottomWidth: 1,
+      borderColor: theme["color-border-100"],
     },
     timeRangeLayout: {
       flexDirection: "row",

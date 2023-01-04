@@ -75,7 +75,19 @@ const ThemedComponent = ({ eva, route, navigation }) => {
     showStatus(status);
   }, [status]);
 
+  const [toDeleteAccountID, setToDeleteAccountID] = React.useState(null);
+  const [confirmPanelVisible, setConfirmPanelVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!confirmPanelVisible && toDeleteAccountID) {
+      console.log("Deleting account: " + toDeleteAccountID);
+      deleteAccount([toDeleteAccountID]);
+      setToDeleteAccountID(null);
+    }
+  }, [confirmPanelVisible, toDeleteAccountID]);
+
   const onDeleteAccount = (accountID) => {
+    setConfirmPanelVisible(true);
     Popup.show({
       type: 'confirm',
       title: 'Warning',
@@ -93,9 +105,10 @@ const ThemedComponent = ({ eva, route, navigation }) => {
       },
       callback: () => {
         Popup.hide();
+        setToDeleteAccountID(accountID);
       },
       onCloseComplete: () => {
-        deleteAccount([accountID]);
+        setConfirmPanelVisible(false);
       }
     });
   }
@@ -155,6 +168,8 @@ const DeleteAccountScreen = withStyles(ThemedComponent, theme => ({
     flex: 1,
     justifyContent: "flex-start",
     width: "100%",
+    borderBottomWidth: 1,
+    borderColor: theme["color-border-100"],
   },
   accountListLayout: {
     alignItems: "center",

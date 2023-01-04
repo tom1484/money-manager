@@ -116,7 +116,7 @@ const useAccountTable = () => {
 
         switch (status) {
           case "1":
-            refetch();
+            // refetch();
             setStatus({
               flag: "success",
               title: 'Successfully Deleted',
@@ -155,7 +155,7 @@ const useAccountTable = () => {
   return {
     available, accountTable,
     addAccount, deleteAccount,
-    status,
+    status, refetch
   };
 };
 

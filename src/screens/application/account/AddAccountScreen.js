@@ -132,6 +132,8 @@ const AddAccountScreen = withStyles(ThemedComponent, theme => {
       justifyContent: "center",
       alignItems: "center",
       width: "100%",
+      borderBottomWidth: 1,
+      borderColor: theme["color-border-100"],
     },
     formLayout: {
       flex: 1,

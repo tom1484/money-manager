@@ -14,7 +14,16 @@ const groups = [
 ];
 
 const ThemedComponent = ({ eva, navigation }) => {
-  const { available, accountTable } = useAccountTable();
+  const { available, accountTable, refetch } = useAccountTable();
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      refetch();
+      console.log("refetch");
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const [accountListByGroup, setAccountListByGroup] = React.useState(
     Object.fromEntries(groups.map((category) => [category.key, []]))
@@ -106,6 +115,8 @@ const AccountsScreen = withStyles(ThemedComponent, theme => ({
     flex: 1,
     justifyContent: "flex-start",
     width: "100%",
+    borderBottomWidth: 1,
+    borderColor: theme["color-border-100"],
   },
   accountListLayout: {
     alignItems: "center",

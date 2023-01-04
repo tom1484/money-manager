@@ -6,10 +6,25 @@ import { TouchableNativeFeedback } from "react-native";
 
 import useAccountTableStore from "@stores/accountTableStore";
 
+import { truncate } from "@utils/common";
+
 const transactionTypeTitle = {
   "INCOME": "Income",
   "EXPENSE": "Expense",
   "TRANSFER": "Transfer",
+};
+
+const categoriesTypeTitle = {
+  "FOOD": "Food",
+  "SALARY": "Salary",
+  "TRANSPORTATION": "Transportation",
+  "ENTERTAINMENT": "Entertainment",
+  "HEALTH": "Health",
+  "SHOPPING": "Shopping",
+  "PERSONAL": "Personal",
+  "TRANSFER": "Transfer",
+  "OTHER": "Other",
+  "INITIAL": "Initial"
 };
 
 const ThemedComponent = ({ eva, transaction, accountID, onPress }) => {
@@ -20,7 +35,8 @@ const ThemedComponent = ({ eva, transaction, accountID, onPress }) => {
       <Layout style={eva.style.rootLayout} onTouchEnd={() => onPress(transaction)}>
         <Layout style={eva.style.typeLayout}>
           <Text appearance="hint" style={eva.style.typeText}>
-            {transactionTypeTitle[transaction.type]}
+            {/* {transactionTypeTitle[transaction.type]} */}
+            {truncate(categoriesTypeTitle[transaction.category], 8)}
           </Text>
         </Layout>
         <Layout style={eva.style.accountsLayout}>
@@ -31,11 +47,11 @@ const ThemedComponent = ({ eva, transaction, accountID, onPress }) => {
                   return (
                     <React.Fragment>
                       <Text style={eva.style.accountText}>
-                        {accountNameTable[transaction.accountSource]}
+                        {truncate(accountNameTable[transaction.accountSource], 8)}
                       </Text>
                       <AntDesign name="arrowright" size={18} color="black" />
                       <Text style={eva.style.accountText}>
-                        {accountNameTable[transaction.accountDestination]}
+                        {truncate(accountNameTable[transaction.accountDestination], 8)}
                       </Text>
                     </React.Fragment>
                   );
@@ -43,14 +59,14 @@ const ThemedComponent = ({ eva, transaction, accountID, onPress }) => {
                   return (
                     <React.Fragment>
                       <Text style={eva.style.accountText}>
-                        {accountNameTable[transaction.accountDestination]}
+                        {truncate(accountNameTable[transaction.accountDestination], 20)}
                       </Text>
                     </React.Fragment>
                   );
                 case "EXPENSE":
                   <React.Fragment>
                     <Text style={eva.style.accountText}>
-                      {accountNameTable[transaction.accountSource]}
+                      {truncate(accountNameTable[transaction.accountSource], 20)}
                     </Text>
                   </React.Fragment>
               }
@@ -60,7 +76,11 @@ const ThemedComponent = ({ eva, transaction, accountID, onPress }) => {
         <Layout style={eva.style.amountLayout}>
           <Text
             style={eva.style.amountText}
-            status={transaction.type === "INCOME" ? "info" : "danger"}
+            status={
+              accountID ? (
+                transaction.accountDestination === accountID ? "info" : "danger"
+              ) : "basic"
+            }
           >
             {transaction.amount.toFixed(1)}
           </Text>
@@ -86,6 +106,7 @@ const TransactionInfo = withStyles(ThemedComponent, (theme) => ({
   },
   typeLayout: {
     width: "20%",
+    backgroundColor: "#00000000"
   },
   typeText: {
     fontSize: 12,
@@ -95,6 +116,7 @@ const TransactionInfo = withStyles(ThemedComponent, (theme) => ({
     justifyContent: "center",
     alignItems: "center",
     width: "55%",
+    backgroundColor: "#00000000"
   },
   accountText: {
     fontSize: 12,
@@ -103,6 +125,7 @@ const TransactionInfo = withStyles(ThemedComponent, (theme) => ({
   amountLayout: {
     alignItems: "center",
     width: "25%",
+    backgroundColor: "#00000000"
   },
   amountText: {
     fontSize: 12,
