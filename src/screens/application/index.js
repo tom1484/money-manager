@@ -1,6 +1,6 @@
-import LedgerScreen from './LedgerScreen';
+import TransactionsScreen from './TransactionsScreen';
 import StatisticsScreen from './StatisticsScreen';
-import AccountsScreen from './AccountsScreen';
+import AccountsScreen from './account/AccountsScreen';
 import SettingsScreen from './SettingsScreen';
 
-export { LedgerScreen, StatisticsScreen, AccountsScreen, SettingsScreen };
+export { TransactionsScreen, StatisticsScreen, AccountsScreen, SettingsScreen };

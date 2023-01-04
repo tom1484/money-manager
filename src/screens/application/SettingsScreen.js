@@ -1,13 +1,34 @@
 import React from "react";
 
-import { Layout, Text } from "@ui-kitten/components";
+import { Layout, Text, withStyles } from "@ui-kitten/components";
 
-const SettingsScreen = () => {
+import { LoadingLayout } from "@components/common";
+
+const ThemedComponent = ({ eva }) => {
   return (
-    <Layout style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <LoadingLayout
+      style={eva.style.rootLayout}
+      loading={false}
+      indicatorStyle={eva.style.indicator}
+    >
       <Text>Settings!</Text>
-    </Layout>
+    </LoadingLayout>
   );
-};
+}
+
+const SettingsScreen = withStyles(ThemedComponent, theme => {
+  return {
+    rootLayout: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    indicator: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      spinnerSize: 'giant',
+    },
+  };
+});
 
 export default SettingsScreen;

@@ -15,6 +15,8 @@ module.exports = function (api) {
           "@stores": "./src/stores",
           "@hooks": "./src/hooks",
           "@refs": "./src/refs",
+          "@utils": "./src/utils",
+          "@event": "./src/event",
           "@graphql": "./src/graphql",
           "@assets": "./assets",
         },
@@ -24,6 +26,18 @@ module.exports = function (api) {
           ".ts",
           ".tsx",
         ]
+      }],
+      ["module:react-native-dotenv", {
+        "envName": "APP_ENV",
+        "moduleName": "@env",
+        "path": ".env",
+        "blocklist": null,
+        "allowlist": null,
+        "blacklist": null, // DEPRECATED
+        "whitelist": null, // DEPRECATED
+        "safe": false,
+        "allowUndefined": true,
+        "verbose": false
       }],
     ]
   };

@@ -1,27 +1,27 @@
 import React from "react";
 
 import { useLazyQuery, useMutation, useSubscription } from '@apollo/client';
-import { USER_SIGN_IN_QUERY } from "@graphql/queries";
-import { USER_SIGN_UP_MUTATION } from "@graphql/mutations";
+import { USER_SIGN_IN_QUERY } from "@graphql/authencation/queries";
+import { USER_SIGN_UP_MUTATION } from "@graphql/authencation/mutations";
 
 import useAppUserStore from "@stores/appUserStore";
 
 
-const useAppUserManager = () => {
+const useAuthencation = () => {
   const [qlUserSignIn] = useLazyQuery(USER_SIGN_IN_QUERY);
   const [qlUserSignUp] = useMutation(USER_SIGN_UP_MUTATION);
 
-  const [signInProcessing, setSignInProcessing] = React.useState(false);
-  const [signUpProcessing, setSignUpProcessing] = React.useState(false);
   const [status, setStatus] = React.useState({});
 
   const { setAppUser } = useAppUserStore();
 
-  const signInAppUser = (userName, password) => {
-    setSignInProcessing(true);
-    qlUserSignIn({ variables: { name: userName, password: password } })
+  const signInAppUser = (input, setProcessing) => {
+    const { userNameInput, passwordInput } = input;
+    setProcessing(true);
+
+    qlUserSignIn({ variables: { name: userNameInput, password: passwordInput } })
       .then((result) => {
-        setSignInProcessing(false);
+        setProcessing(false);
 
         if (result.data && result.data["userSignIn"]) {
           const { status, token, appUser } = result.data["userSignIn"];
@@ -66,7 +66,7 @@ const useAppUserManager = () => {
         }
       })
       .catch((error) => {
-        setSignInProcessing(false);
+        setProcessing(false);
         setStatus({
           flag: "error",
           title: 'Unknown Error',
@@ -75,12 +75,13 @@ const useAppUserManager = () => {
       });
   };
 
-  const signUpAppUser = (userName, password, email) => {
-    setSignUpProcessing(true);
+  const signUpAppUser = (input, setProcessing) => {
+    const { userNameInput, passwordInput, emailInput } = input;
+    setProcessing(true);
 
-    qlUserSignUp({ variables: { name: userName, password: password, email: email } })
+    qlUserSignUp({ variables: { name: userNameInput, password: passwordInput, email: emailInput } })
       .then((result) => {
-        setSignUpProcessing(false);
+        setProcessing(false);
 
         if (result.data && result.data["userSignUp"]) {
           const { status, token, appUser } = result.data["userSignUp"];
@@ -133,7 +134,7 @@ const useAppUserManager = () => {
         }
       })
       .catch((error) => {
-        setSignUpProcessing(false);
+        setProcessing(false);
         setStatus({
           flag: "error",
           title: 'Unknown Error',
@@ -143,10 +144,10 @@ const useAppUserManager = () => {
   };
 
   return {
-    signInProcessing, signInAppUser,
-    signUpProcessing, signUpAppUser,
+    signInAppUser,
+    signUpAppUser,
     status
   };
 };
 
-export default useAppUserManager;
+export default useAuthencation;

@@ -4,7 +4,7 @@ const useConsecutiveInput = (inputNumber, submitHandler) => {
     const inputRefs = Array(inputNumber).fill(0).map(() => React.useRef());
     const submitRef = React.useRef();
 
-    const inputStatusState = Array(inputNumber).fill(0).map(() => React.useState("primary"));
+    const inputStatusState = Array(inputNumber).fill(0).map(() => React.useState("basic"));
     const inputStatus = inputStatusState.map((state) => state[0]);
     const setInputStatus = inputStatusState.map((state) => state[1]);
 
@@ -31,14 +31,14 @@ const useConsecutiveInput = (inputNumber, submitHandler) => {
                     if (firstInvalidIndex === -1)
                         firstInvalidIndex = i;
                 } else {
-                    setInputStatus[i]("primary");
+                    setInputStatus[i]("basic");
                 }
             }
             if (allValid && submitHandler)
                 submitHandler();
             else if (firstInvalidIndex !== -1)
                 inputRefs[firstInvalidIndex].current.focus();
-        }
+        },
     };
 };
 

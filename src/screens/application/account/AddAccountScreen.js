@@ -1,31 +1,40 @@
 import React from "react";
 
-import { View } from "react-native";
-import { Button, Input, Layout, Text, Spinner } from "@ui-kitten/components";
+import { IndexPath, Input, Layout, Select, SelectItem } from "@ui-kitten/components";
 import { withStyles } from "@ui-kitten/components";
 
 import { Popup } from 'react-native-popup-confirm-toast';
 
 import { LoadingButton } from "@components/common";
 
+import useAppUserStore from "@stores/appUserStore";
 import useConsecutiveInput from "@hooks/useConsecutiveInput";
-import useAuthencation from "@hooks/useAuthencation";
 
-const ThemedComponent = ({ eva }) => {
-  const { signUpAppUser, status } = useAuthencation();
-  const [userNameInput, setUserNameInput] = React.useState("tom1484");
-  const [passwordInput, setPasswordInput] = React.useState("password");
-  const [emailInput, setEmailInput] = React.useState("tomchen2003611@gmail.com");
+import useAccountTable from "@hooks/useAccountTable";
+
+const groups = [
+  { key: "CASH", title: "Cash" },
+  { key: "BANK_ACCOUNT", title: "Bank Account" },
+  { key: "DEBIT_CARD", title: "Debit Card" },
+];
+
+const ThemedComponent = ({ eva, route, navigation }) => {
+  const { token } = useAppUserStore();
+  const { addAccount, status } = useAccountTable();
+
+  const [groupSelectedIndex, setGroupSelectedIndex] = React.useState(new IndexPath(0));
+  const [nameInput, setnameInput] = React.useState("New Account");
+  const [depositInput, setDepositInput] = React.useState("1234");
 
   const [processing, setProcessing] = React.useState(false);
 
   const {
-    inputRefs, inputStatus,
-    nextInputFuncs, submitRef, onSubmit
-  } = useConsecutiveInput(3, () => {
-    signUpAppUser({
-      userNameInput, passwordInput, emailInput
-    }, setProcessing);
+    inputRefs, inputStatus, nextInputFuncs,
+    submitRef, onSubmit
+  } = useConsecutiveInput(2, () => {
+    addAccount([
+      groups[groupSelectedIndex.row].key, nameInput, depositInput
+    ], setProcessing);
   });
 
   const showStatus = (status) => {
@@ -41,6 +50,9 @@ const ThemedComponent = ({ eva }) => {
           closeDuration: 50,
           bounciness: 3,
           timing: 1500,
+          onCloseComplete: () => {
+            navigation.goBack();
+          }
         })
         break;
       case "error":
@@ -66,13 +78,24 @@ const ThemedComponent = ({ eva }) => {
 
   return (
     <Layout style={eva.style.rootLayout}>
-      {/* <Layout style={eva.style.formLayout} level="2"> */}
-      <Text category="h1" style={{ margin: 10 }}>Accuont</Text>
+      <Select
+        style={eva.style.input}
+        label="Group"
+        value={groups[groupSelectedIndex.row].title}
+        selectedIndex={groupSelectedIndex}
+        onSelect={setGroupSelectedIndex}
+      >
+        {
+          groups.map((group) => (
+            <SelectItem key={group.key} title={group.title} />
+          ))
+        }
+      </Select>
       <Input
         style={eva.style.input}
-        label="Username"
-        value={userNameInput}
-        onChangeText={setUserNameInput}
+        label="Name"
+        value={nameInput}
+        onChangeText={setnameInput}
         blurOnSubmit={false}
         ref={inputRefs[0]}
         onSubmitEditing={nextInputFuncs[0]}
@@ -80,65 +103,47 @@ const ThemedComponent = ({ eva }) => {
       />
       <Input
         style={eva.style.input}
-        label='Password'
-        value={passwordInput}
-        onChangeText={setPasswordInput}
-        ref={inputRefs[1]}
+        label='Deposit'
+        value={depositInput}
+        onChangeText={setDepositInput}
         blurOnSubmit={false}
-        secureTextEntry={true}
+        ref={inputRefs[1]}
         onSubmitEditing={nextInputFuncs[1]}
         status={inputStatus[1]}
-      />
-      <Input
-        style={eva.style.input}
-        label='E-mail'
-        value={emailInput}
-        onChangeText={setEmailInput}
-        blurOnSubmit={false}
-        ref={inputRefs[2]}
-        onSubmitEditing={nextInputFuncs[2]}
-        status={inputStatus[2]}
       />
       <LoadingButton
         style={eva.style.button}
         ref={submitRef}
         onPress={onSubmit}
         loading={processing}
+        // loading={false}
         indicatorStyle={eva.style.indicator}
       >
-        SIGN UP
+        ADD
       </LoadingButton>
-      {/* </Layout> */}
-    </Layout>
+    </Layout >
   );
 };
 
-const SignUpScreen = withStyles(ThemedComponent, theme => {
-  return ({
+const AddAccountScreen = withStyles(ThemedComponent, theme => {
+  return {
     rootLayout: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
       width: "100%",
-      height: "100%",
     },
-    titleLayout: {
+    formLayout: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
       width: "80%",
-      maxHeight: "20%",
+      maxHeight: "50%",
+      // height: "fit-content",
+      borderRadius: 20,
+      borderColor: theme["color-border-100"],
+      borderWidth: 1,
     },
-    // formLayout: {
-    //   flex: 1,
-    //   justifyContent: "center",
-    //   alignItems: "center",
-    //   width: "80%",
-    //   maxHeight: "62%",
-    //   borderRadius: 20,
-    //   borderColor: theme["color-border-100"],
-    //   borderWidth: 1,
-    // },
     input: {
       width: "80%",
       marginTop: 10,
@@ -154,6 +159,7 @@ const SignUpScreen = withStyles(ThemedComponent, theme => {
     indicator: {
       justifyContent: 'center',
       alignItems: 'center',
+      spinnerSizeL: 'small',
     },
     footerLayout: {
       flex: 1,
@@ -162,7 +168,7 @@ const SignUpScreen = withStyles(ThemedComponent, theme => {
       width: "80%",
       maxHeight: "5%",
     }
-  })
+  };
 });
 
-export default SignUpScreen;
+export default AddAccountScreen;

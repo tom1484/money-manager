@@ -5,19 +5,19 @@ import { Layout, Text, withStyles } from "@ui-kitten/components";
 import { LoadingLayout } from "@components/common";
 
 const ThemedComponent = ({ eva }) => {
-  console.log("StatisticsScreen");
+  console.log("TransactionsScreen");
   return (
     <LoadingLayout
       style={eva.style.rootLayout}
       loading={true}
       indicatorStyle={eva.style.indicator}
     >
-      <Text>Statistics!</Text>
+      <Text>Transaction!</Text>
     </LoadingLayout>
   );
 }
 
-const StatisticsScreen = withStyles(ThemedComponent, theme => {
+const TransactionsScreen = withStyles(ThemedComponent, theme => {
   return {
     rootLayout: {
       flex: 1,
@@ -32,4 +32,4 @@ const StatisticsScreen = withStyles(ThemedComponent, theme => {
   };
 });
 
-export default StatisticsScreen;
+export default TransactionsScreen;

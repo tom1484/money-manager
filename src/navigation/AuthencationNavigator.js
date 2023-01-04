@@ -3,7 +3,6 @@ import React from "react";
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 
 import { SignInScreen, SignUpScreen } from "@screens/authencation";
-
 import useAppUserStore from "@stores/appUserStore";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -21,6 +20,9 @@ const SignInNavigator = ({ navigation }) => {
     <Navigator
       screenOptions={{
         headerShown: true,
+        headerStyle: {
+          borderBottomWidth: 1,
+        },
         gestureEnabled: true,
         gestureDirection: "horizontal",
         ...TransitionPresets.SlideFromRightIOS,

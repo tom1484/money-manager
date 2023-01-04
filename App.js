@@ -4,7 +4,7 @@ import { ApplicationProvider } from "@ui-kitten/components";
 import { default as theme } from "./theme.json";
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import { Root } from "react-native-popup-confirm-toast";
 
@@ -17,16 +17,16 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 import { ScrollView, StyleSheet, Dimensions, View } from "react-native";
 
+import { GRAPHQL_URI } from "@env";
+
 
 const httpLink = new HttpLink({
-  // uri: "http://localhost:4000/graphql",
-  uri: "http://192.168.1.43:4000/graphql",
+  uri: `http://${GRAPHQL_URI}`,
 });
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    // url: "ws://localhost:4000/graphql",
-    url: "ws://192.168.1.43:4000/graphql",
+    url: `ws://${GRAPHQL_URI}`,
     options: {
       lazy: true,
     }
@@ -50,6 +50,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
+      fetchPolicy: 'no-cache',
+      nextFetchPolicy: 'no-cache',
+    },
+    query: {
+      fetchPolicy: 'no-cache',
       nextFetchPolicy: 'no-cache',
     },
   },

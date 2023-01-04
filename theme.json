@@ -44,5 +44,6 @@
   "color-danger-700": "#B72728",
   "color-danger-800": "#931923",
   "color-danger-900": "#7A0F20",
-  "color-border-100": "#DDDDDD"
+  "color-border-100": "#DDDDDD",
+  "color-basic-100": "#EEEEEE"
 }
