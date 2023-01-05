@@ -42,20 +42,20 @@ const categories = [
 const ThemedComponent = ({ eva, navigation }) => {
   const { accountNameTable } = useAccountTableStore();
   const onAddIconPressed = () => {
-    if (Object.keys(accountNameTable).length > 0) {
-      navigation.navigate("AddTransaction");
-    } else {
-      Popup.show({
-        type: 'danger',
-        title: 'Operation not allowed',
-        textBody: 'You need to create at least one account before adding a transaction.',
-        buttonEnabled: false,
-        duration: 0,
-        closeDuration: 50,
-        bounciness: 3,
-        timing: 1500,
-      });
-    }
+    // if (Object.keys(accountNameTable).length > 0) {
+    //   navigation.navigate("AddTransaction");
+    // } else {
+    Popup.show({
+      type: 'danger',
+      title: 'Operation not allowed',
+      textBody: 'You need to create at least one account before adding a transaction.',
+      buttonEnabled: false,
+      duration: 0,
+      closeDuration: 50,
+      bounciness: 3,
+      timing: 1500,
+    });
+    // }
   }
 
   React.useEffect(() => {
