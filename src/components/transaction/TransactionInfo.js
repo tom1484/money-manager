@@ -1,20 +1,14 @@
 import React from "react";
 
-import { Layout, Button, Text, Card, withStyles } from "@ui-kitten/components"
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { Layout, Text, withStyles } from "@ui-kitten/components"
+import { AntDesign } from '@expo/vector-icons';
 import { TouchableNativeFeedback } from "react-native";
 
 import useAccountTableStore from "@stores/accountTableStore";
 
 import { truncate } from "@utils/common";
 
-const transactionTypeTitle = {
-  "INCOME": "Income",
-  "EXPENSE": "Expense",
-  "TRANSFER": "Transfer",
-};
-
-const categoriesTypeTitle = {
+const categoriesTitle = {
   "FOOD": "Food",
   "SALARY": "Salary",
   "TRANSPORTATION": "Transportation",
@@ -36,7 +30,7 @@ const ThemedComponent = ({ eva, transaction, accountID, onPress }) => {
         <Layout style={eva.style.typeLayout}>
           <Text appearance="hint" style={eva.style.typeText}>
             {/* {transactionTypeTitle[transaction.type]} */}
-            {truncate(categoriesTypeTitle[transaction.category], 8)}
+            {truncate(categoriesTitle[transaction.category], 8)}
           </Text>
         </Layout>
         <Layout style={eva.style.accountsLayout}>

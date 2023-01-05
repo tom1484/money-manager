@@ -3,14 +3,11 @@ import React from "react";
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 
 import { AccountsScreen, AccountDetailScreen, AddAccountScreen, DeleteAccountScreen } from "@screens/application/account";
-import { Button, Layout, Text, MenuItem, OverflowMenu } from "@ui-kitten/components";
-import { Feather } from '@expo/vector-icons';
-import { TouchableNativeFeedback, View } from "react-native";
+import { TransactionInfoScreen } from "@screens/application/transaction";
 
 const { Navigator, Screen } = createStackNavigator();
 
 const AccountsScreenNavigator = () => {
-  const [visible, setVisible] = React.useState(false);
 
   return (
     <Navigator
@@ -37,6 +34,14 @@ const AccountsScreenNavigator = () => {
         component={AccountDetailScreen}
         options={{
           title: 'Detail',
+        }}
+      />
+
+      <Screen
+        name="TransactionInfo"
+        component={TransactionInfoScreen}
+        options={{
+          title: 'Transaction',
         }}
       />
       <Screen

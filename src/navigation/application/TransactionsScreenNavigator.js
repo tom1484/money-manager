@@ -2,12 +2,11 @@ import React from "react";
 
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 
-import { TransactionsScreen, TransactionInfoScreen } from "@screens/application/transaction";
+import { TransactionsScreen, TransactionInfoScreen, AddTransactionScreen } from "@screens/application/transaction";
 
 const { Navigator, Screen } = createStackNavigator();
 
 const TransactionsScreenNavigator = () => {
-  const [visible, setVisible] = React.useState(false);
 
   return (
     <Navigator
@@ -36,20 +35,13 @@ const TransactionsScreenNavigator = () => {
           title: 'Transaction',
         }}
       />
-      {/* <Screen
-        name="AddAccount"
-        component={AddAccountScreen}
+      <Screen
+        name="AddTransaction"
+        component={AddTransactionScreen}
         options={{
-          title: 'Add Account',
+          title: 'Add Transaction',
         }}
       />
-      <Screen
-        name="DeleteAccount"
-        component={DeleteAccountScreen}
-        options={{
-          title: 'Delete Account',
-        }}
-      /> */}
     </Navigator>
   )
 };

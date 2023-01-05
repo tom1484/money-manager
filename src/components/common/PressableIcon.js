@@ -1,7 +1,6 @@
 import React from "react";
 
 import { TouchableNativeFeedback, View } from "react-native";
-import { Feather } from '@expo/vector-icons';
 
 const PressableIcon = ({ icon, marginHorizontal, marginVertical, padding, onPressIn }) => {
   return (

@@ -1,1 +1,0 @@
-// const loadAccountTable = (token) => {

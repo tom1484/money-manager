@@ -1,7 +1,6 @@
 import React from "react";
 
-import { View } from "react-native";
-import { Button, Input, Layout, Text, Spinner } from "@ui-kitten/components";
+import { Input, Layout, Text } from "@ui-kitten/components";
 import { withStyles } from "@ui-kitten/components";
 
 import { Popup } from 'react-native-popup-confirm-toast';

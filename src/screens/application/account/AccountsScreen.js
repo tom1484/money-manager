@@ -19,7 +19,6 @@ const ThemedComponent = ({ eva, navigation }) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refetch();
-      console.log("refetch");
     });
 
     return unsubscribe;

@@ -1,14 +1,14 @@
 import React from "react";
 
 import { Layout, Text, withStyles } from "@ui-kitten/components";
-import { ScrollView, TouchableNativeFeedback } from "react-native";
+import { ScrollView } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Popup } from 'react-native-popup-confirm-toast';
 
 import { PressableIcon } from "@components/common";
 
 import useAccountTable from "@hooks/useAccountTable";
-import { LoadingLayout, MoreActionsMenu } from "@components/common";
+import { LoadingLayout } from "@components/common";
 
 const groups = [
   { key: "CASH", title: "Cash" },

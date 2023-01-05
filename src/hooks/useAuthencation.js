@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useLazyQuery, useMutation, useSubscription } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { USER_SIGN_IN_QUERY } from "@graphql/authencation/queries";
 import { USER_SIGN_UP_MUTATION } from "@graphql/authencation/mutations";
 

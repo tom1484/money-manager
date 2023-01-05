@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Dimensions, View } from "react-native";
-import { Button, Input, Layout, Text, Spinner } from "@ui-kitten/components";
+import { Dimensions } from "react-native";
+import { Input, Layout, Text } from "@ui-kitten/components";
 import { withStyles } from "@ui-kitten/components";
 
 import { Popup } from 'react-native-popup-confirm-toast';
@@ -131,16 +131,6 @@ const SignInScreen = withStyles(ThemedComponent, theme => {
       width: "80%",
       maxHeight: "20%",
     },
-    // formLayout: {
-    //   flex: 1,
-    //   justifyContent: "center",
-    //   alignItems: "center",
-    //   width: "80%",
-    //   maxHeight: "50%",
-    //   borderRadius: 20,
-    //   borderColor: theme["color-border-100"],
-    //   borderWidth: 1,
-    // },
     input: {
       width: "80%",
       marginTop: 10,

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Dimensions, TouchableNativeFeedback, View } from "react-native";
-import { Button, Input, Layout, Text, Select, SelectItem, IndexPath } from "@ui-kitten/components";
+import { Button, Input, Layout, Text, Spinner, Divider, Select, SelectItem, IndexPath } from "@ui-kitten/components";
 import { withStyles } from "@ui-kitten/components";
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -11,7 +11,7 @@ import { Popup } from 'react-native-popup-confirm-toast';
 import useAccountTableStore from "@stores/accountTableStore";
 import useTransactionTable from "@hooks/useTransactionTable";
 
-const typeTitle = {
+const typesTitle = {
   "INCOME": "Income",
   "EXPENSE": "Expense",
   "TRANSFER": "Transfer",
@@ -53,19 +53,11 @@ const PropertyBlock = ({ style, title, children }) => {
 
 const ThemedComponent = ({ eva, route, navigation }) => {
   const { accountNameTable } = useAccountTableStore();
-  const accountNamePairs = Object.entries(accountNameTable);
+  const accountNamePairs = Object.keys(accountNameTable).length > 0 ? Object.entries(accountNameTable) : [["", ""]];
   const categoriesTitlePairs = Object.entries(categoriesTitle);
-  // console.log("categoriesTitlePairs", categoriesTitlePairs);
+  const typesTitlePairs = Object.entries(typesTitle);
 
-  const { transaction, allowModify } = route.params;
-
-  React.useEffect(() => {
-    navigation.setOptions({
-      title: typeTitle[transaction.type],
-    });
-  }, []);
-
-  const initialDate = new Date(parseInt(transaction.date));
+  const initialDate = new Date();
   const [date, setDate] = React.useState(initialDate);
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   const [showTimePicker, setShowTimePicker] = React.useState(false);
@@ -79,41 +71,28 @@ const ThemedComponent = ({ eva, route, navigation }) => {
   const minuteString = date.getMinutes().toString().padStart(2, '0');
   const timeString = `${hourString} : ${minuteString}`;
 
-  const initialFromIndex = accountNamePairs.findIndex(([accountID, name]) => accountID === transaction.accountSource);
+  const initialTypeIndex = 0;
+  const [typeInput, setTypeInput] = React.useState(new IndexPath(initialTypeIndex));
+
+  const initialFromIndex = 0;
   const [fromInput, setFromInput] = React.useState(new IndexPath(initialFromIndex));
 
-  const initialToIndex = accountNamePairs.findIndex(([accountID, name]) => accountID === transaction.accountDestination);
+  const initialToIndex = 0;
   const [toInput, setToInput] = React.useState(new IndexPath(initialToIndex));
 
-  const initialAccountIndex = accountNamePairs.findIndex(([accountID, name]) => (
-    accountID === transaction.accountDestination || accountID === transaction.accountSource
-  ));
+  const initialAccountIndex = 0;
   const [accountInput, setAccountInput] = React.useState(new IndexPath(initialAccountIndex));
 
-  const initialCategoryIndex = categoriesTitlePairs.findIndex(([key, title]) => key === transaction.category);
+  const initialCategoryIndex = 0;
   const [categoryInput, setCategoryInput] = React.useState(new IndexPath(initialCategoryIndex));
 
-  const initialAmount = transaction.amount.toString();
+  const initialAmount = "";
   const [amountInput, setAmountInput] = React.useState(initialAmount);
 
-  const initialDescription = transaction.description;
+  const initialDescription = "";
   const [descriptionInput, setDescriptionInput] = React.useState(initialDescription);
 
-  const isInfoAvailable = amountInput !== "" && fromInput.row !== toInput.row && (
-    initialDate.getFullYear() !== date.getFullYear() ||
-    initialDate.getMonth() !== date.getMonth() ||
-    initialDate.getDate() !== date.getDate() ||
-    initialDate.getHours() !== date.getHours() ||
-    initialDate.getMinutes() !== date.getMinutes() ||
-    initialFromIndex !== fromInput.row ||
-    initialToIndex !== toInput.row ||
-    initialAccountIndex !== accountInput.row ||
-    initialCategoryIndex !== categoryInput.row ||
-    initialAmount !== amountInput ||
-    initialDescription !== descriptionInput
-  );
-  // const hasInfoChanged = true;
-  // console.log(hasInfoChanged)
+  const infoComplete = amountInput !== "" && fromInput.row !== toInput.row;
 
   const accountOptions = accountNamePairs.map(([accountID, name]) => (
     <SelectItem key={accountID} title={name} />
@@ -123,10 +102,15 @@ const ThemedComponent = ({ eva, route, navigation }) => {
     <SelectItem key={key} title={title} />
   ));
 
-  const { status, updateTransaction, deleteTransaction } = useTransactionTable();
+  const typeOptions = typesTitlePairs.map(([key, title]) => (
+    <SelectItem key={key} title={title} />
+  ));
 
-  const onSave = () => {
-    updateTransaction({
+  const { status, createTransaction } = useTransactionTable();
+
+  const onAdd = () => {
+    createTransaction({
+      type: typesTitlePairs[typeInput.row][0],
       date: date.toISOString(),  // timestamp
       accountSource: typesTitlePairs[typeInput.row][0] === "EXPENSE" ? accountNamePairs[accountInput.row][0] : (
         typesTitlePairs[typeInput.row][0] === "TRANSFER" ? accountNamePairs[fromInput.row][0] : null
@@ -137,11 +121,7 @@ const ThemedComponent = ({ eva, route, navigation }) => {
       category: categoriesTitlePairs[categoryInput.row][0],
       amount: parseFloat(amountInput),
       description: descriptionInput,
-    }, transaction._id);
-  }
-
-  const onDelete = () => {
-    deleteTransaction(transaction._id);
+    });
   }
 
   const showStatus = (status) => {
@@ -214,6 +194,18 @@ const ThemedComponent = ({ eva, route, navigation }) => {
           />) : null
       }
       <Layout style={eva.style.wrapperLayout}>
+        <PropertyBlock title="Type" style={eva.style}>
+          <Select
+            selectedIndex={typeInput}
+            onSelect={index => setTypeInput(index)}
+            value={typesTitlePairs[typeInput.row][1]}
+            style={{
+              width: "100%",
+            }}
+          >
+            {typeOptions}
+          </Select>
+        </PropertyBlock>
         <PropertyBlock title="Date" style={eva.style}>
           <TouchableNativeFeedback
             background={TouchableNativeFeedback.Ripple("#EEEEEE", false)}
@@ -237,7 +229,7 @@ const ThemedComponent = ({ eva, route, navigation }) => {
           </TouchableNativeFeedback>
         </PropertyBlock>
         {
-          transaction.type === "TRANSFER" ? (
+          typesTitlePairs[typeInput.row][0] === "TRANSFER" ? (
             <React.Fragment>
               <PropertyBlock title="From" style={eva.style}>
                 <Select
@@ -315,24 +307,17 @@ const ThemedComponent = ({ eva, route, navigation }) => {
       <Layout style={eva.style.buttonBlockLayout}>
         <Button
           style={eva.style.button}
-          disabled={!isInfoAvailable}
-          onPress={onSave}
+          disabled={!infoComplete}
+          onPress={onAdd}
         >
-          Save
-        </Button>
-        <Button
-          style={eva.style.button}
-          status="danger"
-          onPress={onDelete}
-        >
-          Delete
+          Add
         </Button>
       </Layout>
     </Layout >
   );
 };
 
-const TransactionInfoScreen = withStyles(ThemedComponent, theme => ({
+const AddTransactionScreen = withStyles(ThemedComponent, theme => ({
   rootLayout: {
     flex: 1,
     justifyContent: "center",
@@ -435,8 +420,8 @@ const TransactionInfoScreen = withStyles(ThemedComponent, theme => ({
     paddingVertical: 15,
   },
   button: {
-    width: "48%",
+    width: "100%",
   },
 }));
 
-export default TransactionInfoScreen;
+export default AddTransactionScreen;

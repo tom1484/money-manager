@@ -116,7 +116,6 @@ const useAccountTable = () => {
 
         switch (status) {
           case "1":
-            // refetch();
             setStatus({
               flag: "success",
               title: 'Successfully Deleted',

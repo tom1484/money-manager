@@ -140,7 +140,7 @@ const ThemedComponent = ({ eva, route, navigation }) => {
                     transactions={transactions}
                     balance={balance}
                     accountID={account._id}
-                    onPress={(transaction) => console.log(transaction)}
+                    onPress={(transaction) => navigation.navigate("TransactionInfo", { transaction: transaction })}
                   />
                 )
               })

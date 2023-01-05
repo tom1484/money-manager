@@ -1,10 +1,14 @@
 import React from "react";
 
-import { IndexPath, Layout, Select, SelectGroup, SelectItem, Text, withStyles } from "@ui-kitten/components"
+import { Layout, Select, SelectGroup, SelectItem, Text, withStyles } from "@ui-kitten/components"
 import { Entypo } from '@expo/vector-icons';
 import { TransactionInfoGroup } from "@components/transaction";
 import { ScrollView } from "react-native";
+import { PressableIcon } from "@components/common";
+import { Ionicons } from '@expo/vector-icons';
+import { Popup } from 'react-native-popup-confirm-toast';
 
+import useAccountTableStore from "@stores/accountTableStore";
 import useAppUserStore from "@stores/appUserStore";
 
 import { useQuery } from "@apollo/client";
@@ -32,9 +36,42 @@ const categories = [
   { key: "PERSONAL", title: "Personal" },
   { key: "TRANSFER", title: "Transfer" },
   { key: "OTHER", title: "Other" },
+  { key: "INITIAL", title: "Initial" }
 ];
 
 const ThemedComponent = ({ eva, navigation }) => {
+  const { accountNameTable } = useAccountTableStore();
+  const onAddIconPressed = () => {
+    if (Object.keys(accountNameTable).length > 0) {
+      navigation.navigate("AddTransaction");
+    } else {
+      Popup.show({
+        type: 'danger',
+        title: 'Operation not allowed',
+        textBody: 'You need to create at least one account before adding a transaction.',
+        buttonEnabled: false,
+        duration: 0,
+        closeDuration: 50,
+        bounciness: 3,
+        timing: 1500,
+      });
+    }
+  }
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <PressableIcon
+          marginHorizontal={8}
+          marginVertical={8}
+          padding={8}
+          onPressIn={onAddIconPressed}
+          icon={<Ionicons name="add" size={24} color="black" />}
+        />
+      ),
+    })
+  }, []);
+
   const { token } = useAppUserStore();
 
   const [viewYear, setViewYear] = React.useState(new Date().getFullYear());
@@ -116,7 +153,6 @@ const ThemedComponent = ({ eva, navigation }) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refetch();
-      console.log("refetch");
     });
 
     return unsubscribe;

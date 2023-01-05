@@ -1,13 +1,9 @@
 import React from "react";
 
-import { Layout, Button, Text, Card, withStyles } from "@ui-kitten/components"
+import { Layout, Text, withStyles } from "@ui-kitten/components"
 import TransactionInfo from "./TransactionInfo";
 
 import { getWeekDay } from "@utils/common";
-
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Layout, Text, withStyles } from "@ui-kitten/components";
+import { Text, withStyles } from "@ui-kitten/components";
 
 import { LoadingLayout } from "@components/common";
 
