@@ -127,9 +127,16 @@ const useAuthencation = () => {
                 title: 'Successfully Signed Up',
                 message: "Welcome to Money Manager!"
               });
+
               setAppUser({
                 name: appUser.name
               }, token);
+
+              storeUserData(userNameInput, passwordInput)
+                .then(() => {
+                  console.log("User data stored");
+                });
+
               break;
 
             case "-1":
