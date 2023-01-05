@@ -41,10 +41,9 @@ const categories = [
 
 const ThemedComponent = ({ eva, navigation }) => {
   const { accountNameTable } = useAccountTableStore();
-  const onAddIconPressed = () => {
-    // if (Object.keys(accountNameTable).length > 0) {
-    //   navigation.navigate("AddTransaction");
-    // } else {
+  const accountEmpty = Object.keys(accountNameTable).length === 0;
+
+  const onAddIconPressed = accountEmpty ? () => {
     Popup.show({
       type: 'danger',
       title: 'Operation not allowed',
@@ -55,7 +54,8 @@ const ThemedComponent = ({ eva, navigation }) => {
       bounciness: 3,
       timing: 1500,
     });
-    // }
+  } : () => {
+    navigation.navigate("AddTransaction");
   }
 
   React.useEffect(() => {
@@ -70,7 +70,7 @@ const ThemedComponent = ({ eva, navigation }) => {
         />
       ),
     })
-  }, []);
+  }, [accountEmpty]);
 
   const { token } = useAppUserStore();
 

@@ -92,7 +92,10 @@ const ThemedComponent = ({ eva, route, navigation }) => {
   const initialDescription = "";
   const [descriptionInput, setDescriptionInput] = React.useState(initialDescription);
 
-  const infoComplete = amountInput !== "" && fromInput.row !== toInput.row;
+  const infoComplete = amountInput !== "" && !(
+    typesTitlePairs[typeInput.row][0] === "TRANSFER" &&
+    fromInput.row === toInput.row
+  );
 
   const accountOptions = accountNamePairs.map(([accountID, name]) => (
     <SelectItem key={accountID} title={name} />
@@ -109,20 +112,39 @@ const ThemedComponent = ({ eva, route, navigation }) => {
   const { status, createTransaction } = useTransactionTable();
 
   const onAdd = () => {
-    createTransaction({
-      type: typesTitlePairs[typeInput.row][0],
-      date: date.toISOString(),  // timestamp
-      accountSource: typesTitlePairs[typeInput.row][0] === "EXPENSE" ? accountNamePairs[accountInput.row][0] : (
-        typesTitlePairs[typeInput.row][0] === "TRANSFER" ? accountNamePairs[fromInput.row][0] : null
-      ),
-      accountDestination: typesTitlePairs[typeInput.row][0] === "INCOME" ? accountNamePairs[accountInput.row][0] : (
-        typesTitlePairs[typeInput.row][0] === "TRANSFER" ? accountNamePairs[toInput.row][0] : null
-      ),
-      category: categoriesTitlePairs[categoryInput.row][0],
-      amount: parseFloat(amountInput),
-      description: descriptionInput,
-    });
-  }
+    switch (typesTitlePairs[typeInput.row][0]) {
+      case "INCOME":
+        createTransaction({
+          type: typesTitlePairs[typeInput.row][0],
+          date: date.toISOString(),
+          accountDestination: accountNamePairs[accountInput.row][0],
+          category: categoriesTitlePairs[categoryInput.row][0],
+          amount: parseFloat(amountInput),
+          description: descriptionInput,
+        });
+        break;
+      case "EXPENSE":
+        createTransaction({
+          type: typesTitlePairs[typeInput.row][0],
+          date: date.toISOString(),
+          accountSource: accountNamePairs[accountInput.row][0],
+          category: categoriesTitlePairs[categoryInput.row][0],
+          amount: parseFloat(amountInput),
+          description: descriptionInput,
+        });
+        break;
+      case "TRANSFER":
+        createTransaction({
+          type: typesTitlePairs[typeInput.row][0],
+          date: date.toISOString(),
+          accountSource: accountNamePairs[fromInput.row][0],
+          accountDestination: accountNamePairs[toInput.row][0],
+          category: categoriesTitlePairs[categoryInput.row][0],
+          amount: parseFloat(amountInput),
+          description: descriptionInput,
+        });
+    }
+  };
 
   const showStatus = (status) => {
     const { flag, title, message } = status;

@@ -21,7 +21,6 @@ import { GRAPHQL_HTTP_URI, GRAPHQL_WS_URI } from "@env";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useAuthencation from "@hooks/useAuthencation";
-import AppContainer from "@containers/AppContainer";
 
 
 const httpLink = new HttpLink({

@@ -11,7 +11,7 @@ import { Popup } from 'react-native-popup-confirm-toast';
 import useAccountTableStore from "@stores/accountTableStore";
 import useTransactionTable from "@hooks/useTransactionTable";
 
-const typeTitle = {
+const typesTitle = {
   "INCOME": "Income",
   "EXPENSE": "Expense",
   "TRANSFER": "Transfer",
@@ -55,13 +55,13 @@ const ThemedComponent = ({ eva, route, navigation }) => {
   const { accountNameTable } = useAccountTableStore();
   const accountNamePairs = Object.entries(accountNameTable);
   const categoriesTitlePairs = Object.entries(categoriesTitle);
-  // console.log("categoriesTitlePairs", categoriesTitlePairs);
+  const typesTitlePairs = Object.entries(typesTitle);
 
   const { transaction, allowModify } = route.params;
 
   React.useEffect(() => {
     navigation.setOptions({
-      title: typeTitle[transaction.type],
+      title: typesTitle[transaction.type],
     });
   }, []);
 
@@ -128,11 +128,11 @@ const ThemedComponent = ({ eva, route, navigation }) => {
   const onSave = () => {
     updateTransaction({
       date: date.toISOString(),  // timestamp
-      accountSource: typesTitlePairs[typeInput.row][0] === "EXPENSE" ? accountNamePairs[accountInput.row][0] : (
-        typesTitlePairs[typeInput.row][0] === "TRANSFER" ? accountNamePairs[fromInput.row][0] : null
+      accountSource: transaction.type === "EXPENSE" ? accountNamePairs[accountInput.row][0] : (
+        transaction.type === "TRANSFER" ? accountNamePairs[fromInput.row][0] : null
       ),
-      accountDestination: typesTitlePairs[typeInput.row][0] === "INCOME" ? accountNamePairs[accountInput.row][0] : (
-        typesTitlePairs[typeInput.row][0] === "TRANSFER" ? accountNamePairs[toInput.row][0] : null
+      accountDestination: transaction.type === "INCOME" ? accountNamePairs[accountInput.row][0] : (
+        transaction.type === "TRANSFER" ? accountNamePairs[toInput.row][0] : null
       ),
       category: categoriesTitlePairs[categoryInput.row][0],
       amount: parseFloat(amountInput),
