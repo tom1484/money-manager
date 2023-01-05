@@ -143,8 +143,8 @@ const ThemedComponent = ({ eva, navigation }) => {
   const { loading, error, data, refetch } = useQuery(LOAD_TRANSACTION_TABLE_QUERY, {
     variables: {
       token: token,
-      startDate: startDate,
-      endDate: endDate,
+      // startDate: startDate,
+      // endDate: endDate,
       filters: filters,
       filterKeys: filterKeys,
     }
@@ -167,7 +167,8 @@ const ThemedComponent = ({ eva, navigation }) => {
           let state = Array.apply(null, Array(31)).map(() => ({ transactions: [] }));
           for (let transaction of transactions) {
             const date = new Date(parseInt(transaction.date));
-            state[date.getDate() - 1].transactions.push(transaction);
+            if (date.getMonth() === viewMonth && date.getFullYear() === viewYear)
+              state[date.getDate() - 1].transactions.push(transaction);
           }
 
           for (let i = 0; i < state.length; i++) {
@@ -187,7 +188,7 @@ const ThemedComponent = ({ eva, navigation }) => {
         });
       }
     }
-  }, [loading, error, data]);
+  }, [loading, error, data, viewMonth, viewYear]);
 
   const deposit = transactionListByDay
     .filter((day) => day.balance)

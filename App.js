@@ -17,16 +17,20 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 import { ScrollView, StyleSheet, Dimensions, View } from "react-native";
 
-import { GRAPHQL_URI } from "@env";
+import { GRAPHQL_HTTP_URI, GRAPHQL_WS_URI } from "@env";
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import useAuthencation from "@hooks/useAuthencation";
+import AppContainer from "@containers/AppContainer";
 
 
 const httpLink = new HttpLink({
-  uri: `http://${GRAPHQL_URI}`,
+  uri: GRAPHQL_HTTP_URI,
 });
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: `ws://${GRAPHQL_URI}`,
+    url: GRAPHQL_WS_URI,
     options: {
       lazy: true,
     }
@@ -71,30 +75,62 @@ const style = StyleSheet.create({
 const { Navigator, Screen } = createStackNavigator();
 
 export default function App() {
+  const [cacheLoading, setCacheLoading] = React.useState(true);
+  const [cacheData, setCacheData] = React.useState({
+    initialUserName: "", initialPassword: ""
+  });
+
+  React.useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const user_name = await AsyncStorage.getItem('@user_name');
+        const user_password = await AsyncStorage.getItem('@user_password');
+        if (user_name !== null && user_password !== null) {
+          setCacheData({
+            initialUserName: user_name,
+            initialPassword: user_password,
+          });
+        }
+      } catch (e) {
+        // error reading value
+      }
+      setCacheLoading(false);
+    };
+    getUserData();
+  }, []);
+
+
+
   return (
     <ApolloProvider client={client}>
       <ApplicationProvider {...eva} theme={{ ...theme, ...eva.light }}>
+        {/* <AppContainer /> */}
         <Root>
           <ScrollView>
             <View style={style.rootLayout}>
-              <NavigationContainer>
-                <Navigator>
-                  <Screen
-                    name="AuthencationNavigator"
-                    component={AuthencationNavigator}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Screen
-                    name="ApplicationNavigator"
-                    component={ApplicationNavigator}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                </Navigator>
-              </NavigationContainer>
+              {
+                cacheLoading ? null : (
+                  <NavigationContainer>
+                    <Navigator>
+                      <Screen
+                        name="AuthencationNavigator"
+                        component={AuthencationNavigator}
+                        options={{
+                          headerShown: false,
+                        }}
+                        initialParams={cacheData}
+                      />
+                      <Screen
+                        name="ApplicationNavigator"
+                        component={ApplicationNavigator}
+                        options={{
+                          headerShown: false,
+                        }}
+                      />
+                    </Navigator>
+                  </NavigationContainer>
+                )
+              }
             </View>
           </ScrollView>
         </Root>

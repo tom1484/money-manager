@@ -6,6 +6,8 @@ import { USER_SIGN_UP_MUTATION } from "@graphql/authencation/mutations";
 
 import useAppUserStore from "@stores/appUserStore";
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const useAuthencation = () => {
   const [qlUserSignIn] = useLazyQuery(USER_SIGN_IN_QUERY);
@@ -14,6 +16,15 @@ const useAuthencation = () => {
   const [status, setStatus] = React.useState({});
 
   const { setAppUser } = useAppUserStore();
+
+  const storeUserData = async (name, password) => {
+    try {
+      await AsyncStorage.setItem('@user_name', name);
+      await AsyncStorage.setItem('@user_password', password);
+    } catch (e) {
+      // saving error
+    }
+  }
 
   const signInAppUser = (input, setProcessing) => {
     const { userNameInput, passwordInput } = input;
@@ -44,6 +55,12 @@ const useAuthencation = () => {
               setAppUser({
                 name: appUser.name
               }, token);
+
+              storeUserData(userNameInput, passwordInput)
+                .then(() => {
+                  console.log("User data stored");
+                });
+
               break;
 
             case "-1":
@@ -66,6 +83,7 @@ const useAuthencation = () => {
         }
       })
       .catch((error) => {
+        console.log(error);
         setProcessing(false);
         setStatus({
           flag: "error",

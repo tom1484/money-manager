@@ -11,10 +11,12 @@ import { LoadingButton } from "@components/common";
 import useConsecutiveInput from "@hooks/useConsecutiveInput";
 import useAuthencation from "@hooks/useAuthencation";
 
-const ThemedComponent = ({ eva, navigation }) => {
+const ThemedComponent = ({ eva, route, navigation }) => {
+  const { initialUserName, initialPassword } = route.params;
+
   const { signInAppUser, status } = useAuthencation();
-  const [userNameInput, setUserNameInput] = React.useState("tom1484");
-  const [passwordInput, setPasswordInput] = React.useState("password");
+  const [userNameInput, setUserNameInput] = React.useState(initialUserName);
+  const [passwordInput, setPasswordInput] = React.useState(initialPassword);
 
   const [processing, setProcessing] = React.useState(false);
 

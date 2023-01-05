@@ -12,9 +12,9 @@ import useAuthencation from "@hooks/useAuthencation";
 
 const ThemedComponent = ({ eva }) => {
   const { signUpAppUser, status } = useAuthencation();
-  const [userNameInput, setUserNameInput] = React.useState("tom1484");
-  const [passwordInput, setPasswordInput] = React.useState("password");
-  const [emailInput, setEmailInput] = React.useState("tomchen2003611@gmail.com");
+  const [userNameInput, setUserNameInput] = React.useState("");
+  const [passwordInput, setPasswordInput] = React.useState("");
+  const [emailInput, setEmailInput] = React.useState("");
 
   const [processing, setProcessing] = React.useState(false);
 

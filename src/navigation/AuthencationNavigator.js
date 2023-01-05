@@ -7,7 +7,7 @@ import useAppUserStore from "@stores/appUserStore";
 
 const { Navigator, Screen } = createStackNavigator();
 
-const SignInNavigator = ({ navigation }) => {
+const SignInNavigator = ({ navigation, route }) => {
   const { appUser } = useAppUserStore();
 
   React.useEffect(() => {
@@ -34,6 +34,7 @@ const SignInNavigator = ({ navigation }) => {
         options={{
           title: 'SIGN IN',
         }}
+        initialParams={route.params}
       />
       <Screen
         name="SignUp"
